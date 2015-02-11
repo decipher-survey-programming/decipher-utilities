@@ -1,8 +1,8 @@
 # utility-scripts
 Collection of mostly Bash and Python scripts for survey programming and related duties
 
-## deviceinfo.py [Brad Hamm](bradley@decipherinc.com)
+## deviceinfo.py https://github.com/bradleydecipher
 Returns device information from 51Degrees service in tabular format
 
-## ip2geo.py [Brad Hamm](bradley@decipherinc.com)
+## ip2geo.py https://github.com/bradleydecipher
 Returns geographic information for an IP address from the MaxMind GeoLite City database
