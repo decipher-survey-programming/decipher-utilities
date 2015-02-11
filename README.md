@@ -1,4 +1,4 @@
-# decipher-utilities
+# utility-scripts
 Collection of mostly Bash and Python scripts for survey programming and related duties
 
 ## deviceinfo.py [Brad Hamm](bradley@decipherinc.com)
