@@ -11,6 +11,6 @@ Returns device information from 51Degrees service in tabular format
 ## ip2geo.py [Brad Hamm] (https://github.com/bradleydecipher)
 Returns geographic information for an IP address from the MaxMind GeoLite City database
 
-## generatevariables.py [Brad Hamm](bradley@decipherinc.com)
+## generatevariables.py [Brad Hamm](https://github.com/bradleydecipher)
 Generates variables.dat data from results data
 
