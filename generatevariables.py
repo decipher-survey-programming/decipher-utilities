@@ -7,17 +7,21 @@ def generate(survey):
 
     iterExtra = Results.Results(survey.path, format=None, readOnly=True).iterExtra(survey)
 
-    for record in iterExtra:
+    while True:
 
-        l = [str(int(record[1])), record[3], record.extra['ipAddress'], record.extra['url']]
+        try:
+            record = iterExtra.next()
+            l = [str(int(record[1])), record[3], record.extra['ipAddress'], record.extra['url']]
 
-        for ev in survey.root.extraVariables:
-            l.append(ev)
-            l.append(record.extra[ev])
+            for ev in survey.root.extraVariables:
+                l.append(ev)
+                l.append(record.extra[ev])
 
-        l = [x.replace('\t', '').replace('\n', '') for x in l]
-        print '\t'.join(l)
-    
+            l = [x.replace('\t', '').replace('\n', '') for x in l]
+            yield '\t'.join(l)
+
+        except StopIteration:
+            break
 
 def main():
 
@@ -32,7 +36,8 @@ def main():
         print >> sys.stderr, "Cannot load survey %r" % surveyPath
         return 1
 
-    generate(survey)
+    for line in generate(survey):
+        print line
 
 
 if __name__ == "__main__":
