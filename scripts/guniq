@@ -1,0 +1,49 @@
+#!/bin/bash
+
+if [[ $# -lt 2 ]];then
+  echo """
+Counts
+usage: guniq [column #,[column #],etc] [file]
+
+% send
+usage: guniq [column #,[column #],etc] [file] [%send]
+""";
+  exit;
+fi
+
+traper()
+{
+    tmper="/tmp/guniq$$${1}"
+    trap "/bin/rm -fr $tmper; exit" 0 1 2 3 15
+}
+
+if [[ -p "$2" ]];then
+	traper
+	cat "$2" > $tmper
+	FILE="$tmper"
+else
+	FILE="$2"
+fi
+
+if [[ "$1" =~ [a-zA-Z] ]];then
+  header="`awk -F"\t" 'BEGIN{ORS=","}{if(FNR == 1){count=split("'$1'", arr, ",");while(i++<count){x=0;while(x++<NF){if(tolower($x)==tolower(arr[i])){print "$"x}}}}}' "$FILE"`"
+else
+  header="`echo \"$1\" | awk -F"," 'BEGIN{ORS=","}END{while(i++<NF){print "$"$i}}'`"
+fi
+
+header="${header//,/\\\",\\\"}"
+header="${header%\\\",\\\"}"
+
+if [[ "$3" ]];then
+	if [[ "$3" =~ "[a-zA-Z]" ]];then
+		exit
+	else
+		perc=$3
+	fi
+else
+	perc=0
+fi
+
+buf="---------------------------------------------------------------------------------------------------------------------------------------"
+
+awk -F"\t" 'BEGIN{header="'${header}'"}{if(FNR==1){flen=length('${header//\\\"/\"}')+11;end;}}END{system("awk -F\"\t\" \047{if(FNR!=1){!arr["(header)"]++}else{head="(header)"}}END{ar=asorti(arr,newarr);for (i=1; i<=ar; i++){if(!'$perc'){final=final sprintf(\"%-9s: %s\\n\",arr[newarr[i]], newarr[i]);rs=rs+1;}else{if(0 <= '$perc' && '$perc' <= 100){if('$perc' < 100){printf(\"-l%s:%s:%.0f \", head, newarr[i], (arr[newarr[i]]*('$perc'/100)))}else{printf(\"-l%s:%s \\n\", head, newarr[i])}}}}{if(!'$perc'){printf(\"%s%."(flen)"s\\nName(s)  : %s\\n%."(flen)"s\\n%-9s: Total Segments\\n\", final, \"-'$buf'-\", head, \"-'$buf'-\", rs)}else{print \"\"}}}\047 \"'"$FILE"'\"")}' "$FILE"

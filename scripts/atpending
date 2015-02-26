@@ -1,0 +1,26 @@
+#!/bin/bash
+
+ESC="\x1b"
+NORMAL="[0m"
+BCYAN="[0;36m"
+BRED="[1;31m"
+
+output=`cat <(atq | sort) | while read i; do at -c ${i%%[[:space:]]*} | sed -ne '/cd \/hom/p' -e '/${SHELL:/{n;p;}' | sed -e "s;/home/jaminb/bin/bulk ;;" -e "s;--throttle-client=[^ ]* ;;" -e "s;--sendid=;;" -e "1s;^cd /home/jaminb/v2/;;" -e "1s;{;atq id = $i;" -e "s;--fromatq ;;"; echo -e ""; done`
+
+key()
+{
+	echo -e "\natq id = ${ESC}${BCYAN}CYAN${ESC}${NORMAL}\nbulk send id = ${ESC}${BRED}RED${ESC}${NORMAL}";
+}
+
+if [[ $output && $1 == 'l' ]]
+then
+    echo -e "$output" | sed 's/\t/ /' | sed -e '/atq id/{N; s/.*\(atq id = \)\([0-9]\+\).*\n\([0-9]*\)/'${ESC}${BCYAN}'\2'${ESC}${NORMAL}': '${ESC}${BRED}'\3'${ESC}${NORMAL}'/}' -e '/^$/d;'
+	key;
+elif [[ $# != 0 && $output ]]
+then
+    echo -e "$output" | sed 's/||/|/;s/\t/ | /' | sed -e 's/\(atq id = \)\([0-9]\+\)/'${ESC}${BCYAN}'\2'${ESC}${NORMAL}'/' -e 's/^[0-9]\+/'${ESC}${BRED}'&'${ESC}${NORMAL}'/';
+	key;      
+elif [[ $output ]]
+then
+	echo -e "$output" | sed '/^$/d;/||/d;s/^[0-9]\+ /bulk /';
+fi

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+PROG=$(basename "$0")
+
+eval set -- `getopt --name "$PROG" --options i -- "$@"`
+
+while [ ! -z "$1" ]; do
+    case "$1" in
+        -i)
+            casing="i";
+            ;;
+        *)
+            break
+            ;;
+    esac
+    shift
+done
+shift 
+
+if [[ $# != 2 ]];then
+	echo -e "usage: $(basename "$0") [-i] \"searched word or phrase\" [directory]/\"filetype\"\n\nex:    Example directory /home/jaminb/v2...\n       $(basename "$0") live ips/survey.xml\n       or\n       $(basename "$0") live ips/\"*xml\"\n\noptional argument:\n  -i Case incensitive"
+	exit -1;
+fi
+
+search="$1"
+directory="`echo "$(dirname \"$2\")"`"
+filename="`echo "$(basename \"$2\")"`"
+
+#grep -i "$search" `find "$directory" -type f -name "$filename"`
+#find "$directory" -type f -name "$filename" -exec grep -iH "$search" "{}" \;
+find "$directory" -type f -name "$filename" -print0 | xargs -0 -n1 -P4 grep -${casing}IH "$search" # | grep -v "Binary file"
