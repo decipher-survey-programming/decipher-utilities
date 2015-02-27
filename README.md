@@ -18,10 +18,10 @@ Returns device information from 51Degrees service in tabular format
 Generates variables.dat data from results data
 
 ## gsearch (Greg)
-???
+Finds files 
 
 ## guniq (Greg)
-???
+Outputs counts of values for a field **or combination of fields** (similar to `... | sort | uniq -c`)
 
 ## ip2geo.py ([Brad](https://github.com/bradleydecipher))
 Returns geographic information for an IP address from the MaxMind GeoLite City database

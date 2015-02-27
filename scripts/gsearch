@@ -18,7 +18,7 @@ done
 shift 
 
 if [[ $# != 2 ]];then
-	echo -e "usage: $(basename "$0") [-i] \"searched word or phrase\" [directory]/\"filetype\"\n\nex:    Example directory /home/jaminb/v2...\n       $(basename "$0") live ips/survey.xml\n       or\n       $(basename "$0") live ips/\"*xml\"\n\noptional argument:\n  -i Case incensitive"
+	echo -e "usage: $(basename "$0") [-i] \"searched word or phrase\" [directory]/\"filetype\"\n\nex:    Example directory /home/jaminb/v2...\n       $(basename "$0") live ips/survey.xml\n       or\n       $(basename "$0") live ips/\"*xml\"\n\noptional argument:\n  -i Case insensitive"
 	exit -1;
 fi
 
